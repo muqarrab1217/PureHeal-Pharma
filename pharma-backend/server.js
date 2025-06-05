@@ -30,6 +30,13 @@ app.use("/api/users", UserRoutes);
 app.use('/api/medicines', MedicineRoutes);
 app.use("/api/categories", CategoryRoutes)
 
+app.get('/', (req, res) => {
+  res.send({
+    activeStatus:true,
+    error:false
+  })
+})
+
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
