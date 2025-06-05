@@ -1,11 +1,13 @@
+// server.js
 const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const serverless = require("serverless-http");  // Add this
 const UserRoutes = require("./routes/userRoutes");
-const MedicineRoutes=require("./routes/medicineRoutes");
-const CategoryRoutes=require("./routes/categoryRoutes");
+const MedicineRoutes = require("./routes/medicineRoutes");
+const CategoryRoutes = require("./routes/categoryRoutes");
 
 dotenv.config();
 
@@ -28,17 +30,15 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/medicaPharm
 // Routes
 app.use("/api/users", UserRoutes);
 app.use('/api/medicines', MedicineRoutes);
-app.use("/api/categories", CategoryRoutes)
+app.use("/api/categories", CategoryRoutes);
 
 app.get('/', (req, res) => {
   res.send({
-    activeStatus:true,
-    error:false
-  })
-})
-
-// Start Server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+    activeStatus: true,
+    error: false
+  });
 });
+
+// Remove app.listen for serverless environment
+// Export the handler wrapped by serverless-http
+module.exports.handler = serverless(app);
